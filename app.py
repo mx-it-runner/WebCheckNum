@@ -64,11 +64,7 @@ def upload_file():
                 output += f"Несопоставленные данные:<br>"
                 output += '<br>'.join(str(data) for data in error_data)
                 
-                
-                
                 return output
-                        
-                #return f"Количество чисел, содержащих 11 символов: {complit_number}<br>Количество чисел с пустыми значениями: {empty_string}<br>Количество чисел, не являющихся числами: {non_number}<br>Сопоставленные данные: <br>{mapped_data}"
             
             except Exception as e:
                 return f"Ошибка при обработке загруженного файла: {str(e)}"
