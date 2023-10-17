@@ -18,7 +18,10 @@
   
             <a class="w-100 btn btn-primary btn-lg" type="submit" href="/number">Отправить</a>
             <hr>
-            <a class="w-100 btn btn-primary btn-lg" type="submit" href="/upload">Загрузить локальный файл</a>
+            <form method="post" enctype="multipart/form-data">
+              <input type="file" name="file">
+              <input type="submit" value="Загрузить">
+            </form>
           </form>
         </div>
     
