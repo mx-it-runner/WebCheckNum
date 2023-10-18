@@ -1,14 +1,27 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Результат</title>
-  </head>
-  <body>
-    <h1>Результат</h1>
-    <ul>
-      {% for number in numbers %}
-      <li>{{ number }}</li>
-      {% endfor %}
-    </ul>
-  </body>
-</html>
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1>Результаты обработки:</h1>
+    {% with var1 = complit_number, var2 = empty_string, var3 = non_number %}
+    <p>Номера, содержащих 11 символов: {{var1}}</p>
+    <p>Номера с пустыми значениями: {{var2}}</p>
+    <p>Номера, не являющихся числами: {{var3}}</p>
+    {% endwith %}
+
+    <h2>Не обработанные номера</h2>
+    <form action="{{ url_for('download_unprocessed') }}">
+        <button type="submit">Скачать необработанные номера</button>
+    </form>
+    {% for nonnum in error_data %}
+        <p>{{ nonnum[0] }}</p>
+    {% endfor %}
+
+    <h2>Обработанные номера</h2>
+    <form action="{{ url_for('download_processed') }}">
+        <button type="submit">Скачать обработанные номера</button>
+    </form>
+    {% for item in mapped_data %}
+        <p>{{ item[0],item[1],item[2]}}</p>
+    {% endfor %}
+
+{% endblock %}

@@ -4,6 +4,9 @@ import pandas as pd
 
 app = Flask(__name__)
 
+mapped_data = []
+error_data = []
+
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -17,9 +20,7 @@ def upload_file():
         # Проверка расширения файла
         if numbers_data.filename.endswith('.xlsx'):
             # Обрабатываем содержимое файла
-            numbers = []
-            mapped_data = []
-            error_data = []
+
             
             non_number = 0
             complit_number = 0
@@ -50,21 +51,8 @@ def upload_file():
                     else:
                         non_number += 1
                         error_data.append([n])
-                
-                output = ""
-                
-                output += f"Количество чисел, содержащих 11 символов: {complit_number}<br>"
-                output += f"Количество чисел с пустыми значениями: {empty_string}<br>"
-                output += f"Количество чисел, не являющихся числами: {non_number}<br>"
-
-                output += f"Сопоставленные данные:<br>"
-                output += '<br>'.join('<br>'.join(map(str, data)) for data in mapped_data)
-                output += "<br>"
-                
-                output += f"Несопоставленные данные:<br>"
-                output += '<br>'.join(str(data) for data in error_data)
-                
-                return output
+                    
+                return render_template('result.html', mapped_data=mapped_data, complit_number=complit_number, empty_string=empty_string, non_number=non_number, error_data=error_data)
             
             except Exception as e:
                 return f"Ошибка при обработке загруженного файла: {str(e)}"
@@ -72,6 +60,20 @@ def upload_file():
             return 'Разрешены только файлы с расширением XLSX'
 
     return render_template('upload.html')
+
+@app.route('/download_processed', methods=['GET'])
+def download_processed():
+    # Код для загрузки обработанных номеров
+    mapped_df = pd.DataFrame(mapped_data, columns=['Номер', 'Оператор сотовой связи', 'Регион'])
+    mapped_df.to_excel('output.xlsx', index=False)
+    return send_file('output.xlsx', as_attachment=True)
+
+@app.route('/download_unprocessed', methods=['GET'])
+def download_unprocessed():
+    # Код для загрузки необработанных номеров
+    error_data_df = pd.DataFrame(error_data, columns=['Номер'])
+    error_data_df.to_excel('errornum.xlsx', index=False)
+    return send_file('errornum.xlsx', as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)

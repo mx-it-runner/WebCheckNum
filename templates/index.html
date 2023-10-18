@@ -2,29 +2,9 @@
 
 {% block body %}
 
-<div class="container">
-    <main>
-        <div class="col-md-7 col-lg-8">
-          <h4 class="mb-3">Установление оператора и региона</h4>
-            <form class="needs-validation" novalidate="">
-              <div class="col-12">
-                <input type="text" class="form-control" id="address" placeholder="Введите номера..." required="">
-                <div class="invalid-feedback">
-                  Введите номера...
-                </div>
-              </div>
-  
-            
-  
-            <a class="w-100 btn btn-primary btn-lg" type="submit" href="/number">Отправить</a>
-            <hr>
-            <form method="post" enctype="multipart/form-data">
-              <input type="file" name="file">
-              <input type="submit" value="Загрузить">
-            </form>
-          </form>
-        </div>
-    
-    </main>
-</div>
+<form method="POST" action="/" enctype="multipart/form-data">
+  <input type="file" name="file" id="file"/>
+  <button type="submit" class="btn btn-primary">Отправить</button>
+</form>
+
 {% endblock %}
