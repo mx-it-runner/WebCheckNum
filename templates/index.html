@@ -2,9 +2,8 @@
 
 {% block body %}
 
-<form method="POST" action="/" enctype="multipart/form-data">
-  <input type="file" name="file" id="file"/>
-  <button type="submit" class="btn btn-primary">Отправить</button>
+<form action="/upload">
+  <button type="submit" class="btn btn-primary">Начать работу</button>
 </form>
 
 {% endblock %}

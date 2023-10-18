@@ -1,13 +1,23 @@
 
-from flask import Flask, render_template, url_for, request, send_file
+from flask import Flask, render_template, request, send_file, session, url_for, redirect
 import pandas as pd
 
 app = Flask(__name__)
 
+app.secret_key = 'your_secret_key'
+
 mapped_data = []
 error_data = []
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
+def del_sessiya():
+    session.clear()
+    return redirect(url_for('index'))
+@app.route('/home')
+def index():
+    return render_template('index.html')
+
+@app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         # Получение загруженного файла из запроса
@@ -20,8 +30,7 @@ def upload_file():
         # Проверка расширения файла
         if numbers_data.filename.endswith('.xlsx'):
             # Обрабатываем содержимое файла
-
-            
+           
             non_number = 0
             complit_number = 0
             empty_string = 0
@@ -51,7 +60,7 @@ def upload_file():
                     else:
                         non_number += 1
                         error_data.append([n])
-                    
+                
                 return render_template('result.html', mapped_data=mapped_data, complit_number=complit_number, empty_string=empty_string, non_number=non_number, error_data=error_data)
             
             except Exception as e:
@@ -60,6 +69,7 @@ def upload_file():
             return 'Разрешены только файлы с расширением XLSX'
 
     return render_template('upload.html')
+
 
 @app.route('/download_processed', methods=['GET'])
 def download_processed():
