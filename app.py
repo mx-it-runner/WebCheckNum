@@ -4,17 +4,14 @@ import pandas as pd
 
 app = Flask(__name__)
 
-app.secret_key = 'your_secret_key'
-
 mapped_data = []
 error_data = []
 
 @app.route('/')
-def del_sessiya():
-    session.clear()
-    return redirect(url_for('index'))
 @app.route('/home')
 def index():
+    mapped_data.clear()
+    error_data.clear()
     return render_template('index.html')
 
 @app.route('/upload', methods=['GET', 'POST'])
@@ -41,7 +38,7 @@ def upload_file():
                 
                 for n in df['Numbers']:
                     x = str(n)
-                    if (len(x)) == 11:
+                    if (len(x)) == 11 and x[1] == "9":
                         complit_number += 1
                         kod_operatora = x[1:4]
                         nomer =  x[4:11]
@@ -84,6 +81,11 @@ def download_unprocessed():
     error_data_df = pd.DataFrame(error_data, columns=['Номер'])
     error_data_df.to_excel('errornum.xlsx', index=False)
     return send_file('errornum.xlsx', as_attachment=True)
+
+@app.route('/number', methods=['GET', 'POST'])
+def check_num_bufer():
+    
+    return render_template('number.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

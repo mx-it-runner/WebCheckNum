@@ -2,8 +2,19 @@
 
 {% block body %}
 
-<form action="/upload">
-  <button type="submit" class="btn btn-primary">Начать работу</button>
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+  <h1 class="display-3 fw-normal">ChekNum</h1>
+  <p class="fs-5 text-muted">Добро пожаловать в систему для установления оператора сотовой связи и региона абонентских номеров.</p>
+  <p class="fs-5 text-muted">Ресурс разработан для единовременной обработки большого количества номеров.</p>
+</div>
+
+<form class="button-container" action="/upload">
+  <button type="submit" class="btn-abv">Обработка с помощью Excel-файла формата .xlsx</button>
 </form>
+
+<form class="button-container" action="/number">
+  <button type="submit" class="btn-abv">Обработка вручную или из буфера обмена</button>
+</form>
+
 
 {% endblock %}
