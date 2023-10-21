@@ -26,8 +26,7 @@ def upload_file():
 
         # Проверка расширения файла
         if numbers_data.filename.endswith('.xlsx'):
-            # Обрабатываем содержимое файла
-           
+
             non_number = 0
             complit_number = 0
             empty_string = 0
@@ -38,18 +37,25 @@ def upload_file():
                 
                 for n in df['Numbers']:
                     x = str(n)
+                    
                     if (len(x)) == 11 and x[1] == "9":
-                        complit_number += 1
+                        
                         kod_operatora = x[1:4]
                         nomer =  x[4:11]
                         
                         match = def_data[(def_data['АВС/ DEF'] == int(kod_operatora)) & (def_data['От'] <= int(nomer)) & (def_data['До'] >= int(nomer))]
+                        fals_number = def_data[(def_data['АВС/ DEF'] != int(kod_operatora)) & (def_data['От'] >= int(nomer)) & (def_data['До'] <= int(nomer))]
                         
                         if not match.empty:
                             operator = match['Оператор'].iloc[0]
                             region = match['Регион'].iloc[0]
+                            complit_number += 1
                             
                             mapped_data.append([n, operator, region])
+                        
+                        else:
+                            non_number += 1
+                            error_data.append([n])
                     
                     elif match.empty:
                         empty_string += 1
@@ -57,7 +63,7 @@ def upload_file():
                     else:
                         non_number += 1
                         error_data.append([n])
-                
+                           
                 return render_template('result.html', mapped_data=mapped_data, complit_number=complit_number, empty_string=empty_string, non_number=non_number, error_data=error_data)
             
             except Exception as e:
