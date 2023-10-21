@@ -2,19 +2,19 @@
 
 {% block body %}
 
-<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+<div class="px-4 py-5 my-5 text-center">
   <h1 class="display-3 fw-normal">ChekNum</h1>
-  <p class="fs-5 text-muted">Добро пожаловать в систему для установления оператора сотовой связи и региона абонентских номеров.</p>
-  <p class="fs-5 text-muted">Ресурс разработан для единовременной обработки большого количества номеров.</p>
+  <p class="lead">Добро пожаловать в систему для установления оператора сотовой связи и региона абонентских номеров.</p>
+  <p class="lead">Ресурс разработан для единовременной обработки большого количества номеров.</p>
+  <p class="lead">Выберите удобный способ</p>
 </div>
 
 <form class="button-container" action="/upload">
-  <button type="submit" class="btn-abv">Обработка с помощью Excel-файла формата .xlsx</button>
+  <button type="submit" class="btn-abv">Ввод данных с помощью Excel-файла формата .xlsx</button>
 </form>
 
 <form class="button-container" action="/number">
-  <button type="submit" class="btn-abv">Обработка вручную или из буфера обмена</button>
+  <button type="submit" class="btn-abv">Ввод данных вручную или из буфера обмена</button>
 </form>
-
 
 {% endblock %}

@@ -1,3 +1,12 @@
+body {
+    margin: 30px;
+}
+
+.p-num {
+    margin-top: 14px;
+    margin-bottom: -1rem;
+}
+
 .button-container {
     display: flex;
     justify-content: center;
@@ -17,3 +26,28 @@
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
 }
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 0vh;
+}
+
+.input-container {
+    text-align: center;
+}
+
+.input-container input {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+}
+
+#bufer_num {
+    margin: 0px
+}
+
+

@@ -8,17 +8,28 @@
 </head>
 <body>
     <header>
-        <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
-          <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-            <span class="fs-4">ChekNum</span>
-          </a>
-    
-          <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
-            <a class="me-3 py-2 text-dark text-decoration-none" href="/">Главная страница</a>
-            <a class="me-3 py-2 text-dark text-decoration-none" href="/">Рекомендации</a>
-            <a class="me-3 py-2 text-dark text-decoration-none" href="/">О нас</a>
-          </nav>
+
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">ChekNum</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/home">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Рекомендации</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">О проекте</a>
+              </li>
+            </ul>
+          </div>
         </div>
+      </nav>
     </header>
 {% block body %}{% endblock %}
 

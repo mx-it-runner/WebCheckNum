@@ -1,6 +1,7 @@
 
-from flask import Flask, render_template, request, send_file, session, url_for, redirect
+from flask import Flask, render_template, request, send_file, url_for, redirect
 import pandas as pd
+import re
 
 app = Flask(__name__)
 
@@ -16,13 +17,15 @@ def index():
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
+    mapped_data.clear()
+    error_data.clear()
     if request.method == 'POST':
         # Получение загруженного файла из запроса
         numbers_data = request.files['file']
         
         # Проверка наличия файла
         if numbers_data.filename == '':
-            return 'Файл не выбран'
+            return render_template('upload.html')
 
         # Проверка расширения файла
         if numbers_data.filename.endswith('.xlsx'):
@@ -32,10 +35,10 @@ def upload_file():
             empty_string = 0
             
             try:
-                df = pd.read_excel(numbers_data)
+                df = pd.read_excel(numbers_data, header=None)
                 def_data = pd.read_excel('Data.xlsx')
                 
-                for n in df['Numbers']:
+                for n in df[0]:
                     str_num = str(n)
                     
                     if str_num != "" and str_num != "nan":
@@ -107,8 +110,57 @@ def download_unprocessed():
 
 @app.route('/number', methods=['GET', 'POST'])
 def check_num_bufer():
-    
-    return render_template('number.html')
+    mapped_data.clear()
+    error_data.clear()
 
+    non_number = 0
+    complit_number = 0
+    
+    if request.method == 'POST':
+        block_numbers = request.form['bufer_num']
+        
+        if block_numbers == "":
+            return render_template('number.html')
+            
+        
+        block_numbers = ''.join(filter(str.isdigit, block_numbers))
+        def_data = pd.read_excel('Data.xlsx')
+            
+        for i in range(0, len(block_numbers), 11):
+            block = block_numbers[i:i+11]
+            final_num_arrey = []
+            if block.startswith("79") or block.startswith("89"):
+                if len(block) == 11:
+                    final_num_arrey == block
+                    
+                    def_data = pd.read_excel('Data.xlsx')
+                    kod_operatora = block[1:4]
+                    nomer =  block[4:11]
+                        
+                    match = def_data[(def_data['АВС/ DEF'] == int(kod_operatora)) & (def_data['От'] <= int(nomer)) & (def_data['До'] >= int(nomer))]
+                        
+                    if not match.empty:
+                        operator = match['Оператор'].iloc[0]
+                        region = match['Регион'].iloc[0]
+                        complit_number += 1
+                            
+                        mapped_data.append([block, operator, region])
+
+                    else:
+                        non_number += 1
+                        error_data.append([block])   
+            else:
+                return render_template('number.html')
+        return render_template('bufercomplit.html', mapped_data=mapped_data, complit_number=complit_number, non_number=non_number, error_data=error_data)
+                
+
+
+
+        
+        
+        
+        
+    return render_template('number.html')
+    
 if __name__ == '__main__':
     app.run(debug=True)

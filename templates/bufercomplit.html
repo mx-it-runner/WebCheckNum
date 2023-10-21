@@ -4,9 +4,8 @@
 
 <div class="px-4 py-5 my-5 text-center">
         <h1 class="display-3 fw-normal">Результаты обработки:</h1>
-        {% with var1 = complit_number, var2 = empty_string, var3 = non_number %}
+        {% with var1 = complit_number, var3 = non_number %}
         <p class="fs-5 text-muted">Обработаны: {{var1}}</p>
-        <p class="fs-5 text-muted">Пустые ячейки: {{var2}}</p>
         <p class="fs-5 text-muted">Не обработанные значения: {{var3}}</p>
         {% endwith %}
 
