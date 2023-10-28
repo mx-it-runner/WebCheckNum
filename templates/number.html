@@ -2,24 +2,43 @@
 
 {% block body %}
 
-<div class="px-4 py-5 my-5 text-center">
-    <h1 class="display-4 fw-normal">Загрузите файл .xlsx со списком номеров.</h1>
+<div class="px-4 py-4 my-4 text-center">
+    <h1 class="display-4 fw-normal">ChekNum</h1>
     <p class="lead">Для корректной обработки, вводите номера которые начинаются на "+79***", "79**", "89**"</p>
     <p class="lead">ВНИМАНИЕ! Номера на "9**" не обработаются</p>
 </div>
 
-<div class="px-4 py-5 my-5 text-center">
-    <form action="/number" method="POST">
-        <div class="center">
-            <div class="input-container">
-                <input type="submit" value="Отправить">
-                <hr>
-                <textarea autofocus class="form-control" id="bufer_num" rows="3" name="bufer_num" placeholder="Введите номера ..." rows="100"></textarea>
+<form action="/number" method="post">
 
+<div class="row d-flex justify-content-center mt-100">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Разделитель</h4>
+                <p class="card-description">Выберете символ разделения номеров</p>
+                <div >
+
+                    <input type="radio" name="radio" id="radio1" value="," />
+                    <label class="radio" for="radio1">"," (79997332217, 79997332217)</label><br>
+                    <input type="radio" name="radio" id="radio2" value=";" />
+                    <label for="radio2">";" (79997332217; 79997332217)</label><br>
+                    <input type="radio" name="radio" id="radio3"  value=" " />
+                    <label for="radio3">" " (Пробел) (79997332217 79997332217)</label><br>
+                    <input type="radio" name="radio" id="radio4" checked="true"  value="" />
+                    <label for="radio4">Каждый номер с новой строки</label><br>
+                    
+
+                </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
 
+<div class="text-center my-4">
+    <textarea name="numbers" rows="5" cols="50" placeholder="Введите номера..." ></textarea><br>
+    <button type="submit" class="btn btn-primary btn-lg px-4 gap-3" value="Submit">Обработать</button>
+</div>
+
+</form>
 
 {% endblock %}

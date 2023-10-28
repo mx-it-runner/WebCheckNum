@@ -101,6 +101,8 @@ def download_processed():
     mapped_df.to_excel('output.xlsx', index=False)
     return send_file('output.xlsx', as_attachment=True)
 
+
+ # Отдать файл на скачавания необработанных номеров
 @app.route('/download_unprocessed', methods=['GET'])
 def download_unprocessed():
     # Код для загрузки необработанных номеров
@@ -108,59 +110,72 @@ def download_unprocessed():
     error_data_df.to_excel('errornum.xlsx', index=False)
     return send_file('errornum.xlsx', as_attachment=True)
 
+
 @app.route('/number', methods=['GET', 'POST'])
 def check_num_bufer():
     mapped_data.clear()
     error_data.clear()
 
+    def_data = pd.read_excel('Data.xlsx')
     non_number = 0
     complit_number = 0
     
     if request.method == 'POST':
-        block_numbers = request.form['bufer_num']
-        
-        if block_numbers == "":
-            return render_template('number.html')
+        numbers = request.form.get('numbers')
+        separator = request.form['radio']
+        if separator == "":
+            numbers_array = numbers.split('\n')
+        else:
+            numbers_array = numbers.split(separator)
             
+        cleaned_array = []
         
-        block_numbers = ''.join(filter(str.isdigit, block_numbers))
-        def_data = pd.read_excel('Data.xlsx')
-            
-        for i in range(0, len(block_numbers), 11):
-            block = block_numbers[i:i+11]
-            final_num_arrey = []
-            if block.startswith("79") or block.startswith("89"):
-                if len(block) == 11:
-                    final_num_arrey == block
-                    
-                    def_data = pd.read_excel('Data.xlsx')
-                    kod_operatora = block[1:4]
-                    nomer =  block[4:11]
+        for item in numbers_array:
+            cleaned_item = re.sub(r'\D', '', item)
+            cleaned_array.append(cleaned_item)
+        
+        for com_num in cleaned_array:
+            if (len(com_num)) == 11:
+                kod_operatora = com_num[1:4]
+                nomer =  com_num[4:11]
                         
-                    match = def_data[(def_data['АВС/ DEF'] == int(kod_operatora)) & (def_data['От'] <= int(nomer)) & (def_data['До'] >= int(nomer))]
+                match = def_data[(def_data['АВС/ DEF'] == int(kod_operatora)) & (def_data['От'] <= int(nomer)) & (def_data['До'] >= int(nomer))]
                         
-                    if not match.empty:
-                        operator = match['Оператор'].iloc[0]
-                        region = match['Регион'].iloc[0]
-                        complit_number += 1
+                if not match.empty:
+                    operator = match['Оператор'].iloc[0]
+                    region = match['Регион'].iloc[0]
+                    complit_number += 1
                             
-                        mapped_data.append([block, operator, region])
-
-                    else:
-                        non_number += 1
-                        error_data.append([block])   
+                    mapped_data.append([com_num, operator, region])
+                        
+                else:
+                    non_number += 1
+                    error_data.append([com_num])
+            
+            elif (len(com_num)) == 10:
+                com_num = "7" + com_num
+                        
+                kod_operatora = com_num[1:4]
+                nomer =  com_num[4:11]
+                        
+                match = def_data[(def_data['АВС/ DEF'] == int(kod_operatora)) & (def_data['От'] <= int(nomer)) & (def_data['До'] >= int(nomer))]
+                        
+                if not match.empty:
+                    operator = match['Оператор'].iloc[0]
+                    region = match['Регион'].iloc[0]
+                    complit_number += 1
+                            
+                    mapped_data.append([com_num, operator, region])
+                        
             else:
-                return render_template('number.html')
+                non_number += 1
+                error_data.append([com_num])
+        
         return render_template('bufercomplit.html', mapped_data=mapped_data, complit_number=complit_number, non_number=non_number, error_data=error_data)
-                
-
-
-
-        
-        
-        
-        
+            
     return render_template('number.html')
+
+
     
 if __name__ == '__main__':
     app.run(debug=True)
