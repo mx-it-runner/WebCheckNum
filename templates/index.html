@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<div class="px-4 py-5 my-5 text-center">
+<div class="px-1 py-5 my-1 text-center">
   <h1 class="display-3 fw-normal">ChekNum</h1>
   <p class="lead">Добро пожаловать в систему для установления оператора сотовой связи и региона абонентских номеров.</p>
   <p class="lead">Ресурс разработан для единовременной обработки большого количества номеров.</p>
@@ -16,5 +16,14 @@
 <form class="button-container" action="/number">
   <button type="submit" class="btn-abv">Ввод данных вручную или из буфера обмена</button>
 </form>
+
+<hr>
+<div class="px-4 py-1 my-1 text-center">
+  <p class="lead">Быстрая обработка номера</p>
+  <input type="text" id="phoneNumberInput" placeholder="Введите номер" maxlength="15">
+  <button onclick="processPhoneNumber()">Обработать</button>
+
+  <div id="result"></div>
+</div>
 
 {% endblock %}

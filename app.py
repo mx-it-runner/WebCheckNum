@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, send_file, url_for, redirect
+from flask import Flask, render_template, request, send_file, url_for, redirect, jsonify
 import pandas as pd
 import re
 
@@ -175,7 +175,53 @@ def check_num_bufer():
             
     return render_template('number.html')
 
+@app.route('/about', methods=['GET', 'POST'])
+def about_us():
+    return render_template('about.html')
+@app.route('/recommendations', methods=['GET', 'POST'])
+def recommendations():
+    return render_template('rek.html')
 
-    
+# Быстрая обработка номера + AJAX
+@app.route("/process", methods=['GET', 'POST'])
+def process():
+    phoneNumber = request.form["phoneNumber"]
+    processedNumber = re.sub(r'\D', '', phoneNumber)
+    def_data = pd.read_excel('Data.xlsx')
+    #print(processedNumber) == 79128338655
+    if (len(processedNumber)) == 11:
+        kod_operatora = processedNumber[1:4]
+        nomer =  processedNumber[4:11]
+                        
+        match = def_data[(def_data['АВС/ DEF'] == int(kod_operatora)) & (def_data['От'] <= int(nomer)) & (def_data['До'] >= int(nomer))]
+                        
+        if not match.empty:
+            operator = match['Оператор'].iloc[0]
+            region = match['Регион'].iloc[0]
+            result_num = []
+            result_num.append([processedNumber, operator, region])
+            processedNumber = result_num
+                        
+        else:
+            processedNumber = "Нет данных"
+            
+    elif (len(processedNumber)) == 10:
+            full_num = "7" + processedNumber           
+            kod_operatora = full_num[1:4]
+            nomer =  full_num[4:11]           
+            match = def_data[(def_data['АВС/ DEF'] == int(kod_operatora)) & (def_data['От'] <= int(nomer)) & (def_data['До'] >= int(nomer))]
+                        
+            if not match.empty:
+                operator = match['Оператор'].iloc[0]
+                region = match['Регион'].iloc[0]
+                result_num = []        
+                result_num.append([processedNumber, operator, region])
+                processedNumber = result_num
+            else:
+                processedNumber = "Нет данных"
+
+    return jsonify(processedNumber)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
